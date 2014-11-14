@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="AnimeViewer.Controls.LeftPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             x:Name="leftPanel"
+             mc:Ignorable="d" Height="556" Width="285">
+    <Grid>
+        <ComboBox x:Name="CBrepositories" Margin="10,49,10,0" VerticalAlignment="Top" SelectedItem="{Binding ElementName=leftPanel,Path=SelectedRepository,Mode=OneWayToSource}" ItemsSource="{Binding ElementName=leftPanel,Path=Repositories,Mode=OneWay}" DisplayMemberPath="Path" />
+        <Label Content="Repositories" HorizontalAlignment="Left" Margin="10,18,0,0" VerticalAlignment="Top" Foreground="{DynamicResource LabelForegroundDecription}"/>
+        <ListBox x:Name="LBseries"  Margin="10,111,10,10" ItemsSource="{Binding ElementName=leftPanel,Path=SelectedRepository.Series,Mode=OneWay}" DisplayMemberPath="Name" SelectedItem="{Binding ElementName=leftPanel,Path=SelectedSerie}"  />
+        <Label Content="Series" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top" Foreground="{DynamicResource LabelForegroundDecription}"/>
+
+    </Grid>
+</UserControl>

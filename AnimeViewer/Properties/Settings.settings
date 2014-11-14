@@ -1,0 +1,15 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="AnimeViewer.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="SearchApiurl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://www.animenewsnetwork.com/encyclopedia/reports.xml?id=155&amp;type=anime&amp;nlist=all&amp;search=</Value>
+    </Setting>
+    <Setting Name="InformationApiUrl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://cdn.animenewsnetwork.com/encyclopedia/api.xml?anime=</Value>
+    </Setting>
+    <Setting Name="ImagesPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">images</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
