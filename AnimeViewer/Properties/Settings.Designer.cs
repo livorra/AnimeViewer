@@ -71,5 +71,17 @@ namespace AnimeViewer.Properties {
                 this["SerieInfoFile"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Are you sure you want to unatach this serie?")]
+        public string MessageUnatachSerie {
+            get {
+                return ((string)(this["MessageUnatachSerie"]));
+            }
+            set {
+                this["MessageUnatachSerie"] = value;
+            }
+        }
     }
 }

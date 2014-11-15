@@ -54,7 +54,9 @@ namespace AnimeViewer.Controls
             }
            
             List<Serie> series = repository.Series;
+            temp.Clear();
             PBprogress.Maximum = series.Count;
+            PBprogress.Value = 0;
 
             new Thread(new ThreadStart(() =>
                 {
@@ -73,9 +75,10 @@ namespace AnimeViewer.Controls
                             {
                                 threads[currThread] = new Thread(new ThreadStart(() =>
                                 {
-                                    temp.Add(new SerieAssociationEntity(serie.Name));
+                                    SerieAssociationEntity entity = new SerieAssociationEntity(serie);
                                     this.Dispatcher.Invoke(new dvoid(() =>
                                     {
+                                        temp.Add(entity);
                                         PBprogress.Value++;
                                         Lprogress.Text = "Obtained posibilities for " +serie.Name + " ["+ PBprogress.Value + " of " + PBprogress.Maximum+"]";
                                     }));
@@ -115,7 +118,22 @@ namespace AnimeViewer.Controls
         }
         private void Bsave_Click(object sender, RoutedEventArgs e)
         {
+            for (int i = 0; i < DGassociation.Items.Count; i++)
+            { 
+                if (!(DGassociation.Items[i] is SerieAssociationEntity))
+                    continue;
+                SerieAssociationEntity currentElement = DGassociation.Items[i] as SerieAssociationEntity;
+                if (currentElement == null || currentElement.SelectedOfferId == null)
+                    continue;
+                int selectedId = currentElement.SelectedOfferId.id;
 
+                Serie serie = repository.Series.FirstOrDefault(o => o.Name == currentElement.Serie.Name);
+                if(selectedId == -1)
+                    serie.Info = null;
+                else
+                    serie.Info = Animenewsnetwork.getInformation(selectedId);
+                
+            }
         }
         #region listview presentation helper
         private void DGassociation_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -136,20 +154,35 @@ namespace AnimeViewer.Controls
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             animenewsnetworkSearch selected = ((ComboBox)e.Source).SelectedItem as animenewsnetworkSearch;
+            showAnmeNetworkSearch(selected);
+
+        }
+        private void DGassociation_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SerieAssociationEntity selected = ((ListView)e.Source).SelectedItem as SerieAssociationEntity;
+            if(selected != null)
+                showAnmeNetworkSearch(selected.SelectedOfferId);
+        }
+        private void showAnmeNetworkSearch(animenewsnetworkSearch selected)
+        {
             if (selected == null)
                 return;
             new Thread(new ThreadStart(() =>
             {
-
+                if (selected.id == -1)
+                    return;
                 AnimeInfo info = Animenewsnetwork.getInformation(selected.id);
+                
                 this.Dispatcher.Invoke(new dvoid(() =>
                 {
                     lastSearchSelected = info;
                 }));
             })).Start();
-
         }
         #endregion
+
+
+        
 
         
 

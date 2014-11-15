@@ -17,15 +17,15 @@
             <TextBlock x:Name="Lprogress" Text="" HorizontalAlignment="Center" Margin="10,210,10,10" VerticalAlignment="Center" Width="500" Foreground="{DynamicResource ForegroundInfo}" RenderTransformOrigin="9.3,-0.423"/>
         </Grid>
         <Button x:Name="Bscan" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Width="370" Height="87" FontSize="36" Content="Scan Repository" Click="Button_Click" />
-        <Grid x:Name="PScaned">
-            <ListView x:Name="DGassociation" Margin="10,102,10,301" ItemsSource="{Binding}" SizeChanged="DGassociation_SizeChanged">
+        <Grid x:Name="PScaned" Visibility="Hidden">
+            <ListView x:Name="DGassociation" Margin="10,102,10,301" ItemsSource="{Binding}" SizeChanged="DGassociation_SizeChanged" SelectionChanged="DGassociation_SelectionChanged">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="Serie" Width="auto" DisplayMemberBinding="{Binding Name}" x:Name="FillColumn" />
+                        <GridViewColumn Header="Serie" Width="auto" DisplayMemberBinding="{Binding Serie.Name}" x:Name="FillColumn" />
                         <GridViewColumn Width="400" Header="Posibilities">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ComboBox ItemsSource="{Binding Posibilities}" MinWidth="370" SelectionChanged="ComboBox_SelectionChanged" />
+                                    <ComboBox ItemsSource="{Binding Posibilities}" MinWidth="370" SelectionChanged="ComboBox_SelectionChanged" SelectedItem="{Binding Path=SelectedOfferId}" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -33,7 +33,7 @@
                 </ListView.View>
             </ListView>
             <local:SerieInfoControl x:Name="SIserieInfo" Info="{Binding ElementName=serieassociation,Path=lastSearchSelected}" VerticalAlignment="Bottom" Height="262" Width="Auto" Background="#33000000" Margin="10,0" />
-            <Button x:Name="Bsave" HorizontalAlignment="Left" Margin="10,0,0,267" VerticalAlignment="Bottom" Width="105" Height="29" FontSize="18" Content="Save" Click="Button_Click"  />
+            <Button x:Name="Bsave" HorizontalAlignment="Left" Margin="10,0,0,267" VerticalAlignment="Bottom" Width="105" Height="29" FontSize="18" Content="Save" Click="Bsave_Click"  />
         </Grid>
     </Grid>
 </UserControl>

@@ -10,6 +10,7 @@ namespace AnimeViewer.Classes
 {
     public class AnimeInfo
     {
+        public int Id { get; set; }
         public string Title { get; set; }
         public List<string> Genres { get; set; }
         public string Start { get; set; }
@@ -22,8 +23,9 @@ namespace AnimeViewer.Classes
             Genres = new List<string>();
             OfficialEpisodes = new Dictionary<int, string>();
         }
-        public AnimeInfo(string _title, List<string> _genres, string _start, string _web, string _screenShot, string _description, Dictionary<int, string> _officialEpisodes)
+        public AnimeInfo(int _id,string _title, List<string> _genres, string _start, string _web, string _screenShot, string _description, Dictionary<int, string> _officialEpisodes)
         {
+            Id = _id;
             Title = _title;
             Genres = _genres;
             Start = _start;

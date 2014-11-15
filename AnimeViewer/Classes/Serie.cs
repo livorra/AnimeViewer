@@ -33,7 +33,12 @@ namespace AnimeViewer.Classes
             }
             set
             {
-                Files.WriteFile(System.IO.Path.Combine(path,Properties.Settings.Default.SerieInfoFile),JsonConvert.SerializeObject(value));
+                if(value != null)
+                    Files.WriteFile(System.IO.Path.Combine(path,Properties.Settings.Default.SerieInfoFile),JsonConvert.SerializeObject(value));
+                else
+                {
+                    File.Delete(System.IO.Path.Combine(path,Properties.Settings.Default.SerieInfoFile));
+                }
             }
         }
 

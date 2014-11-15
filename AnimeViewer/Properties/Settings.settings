@@ -14,5 +14,8 @@
     <Setting Name="SerieInfoFile" Type="System.String" Scope="User">
       <Value Profile="(Default)">animeviewer.info</Value>
     </Setting>
+    <Setting Name="MessageUnatachSerie" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Are you sure you want to unatach this serie?</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

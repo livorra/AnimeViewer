@@ -27,11 +27,8 @@ namespace AnimeViewer.External
                     Convert.ToInt32(item.SelectSingleNode("id").InnerText),
                     item.SelectSingleNode("name").InnerText,
                     item.SelectSingleNode("type").InnerText);
-                if (element.type == "TV")
-                {
                     min1 = true;
                     posibles.Add(element);
-                }
             }
             if (!min1)
             {
@@ -54,6 +51,7 @@ namespace AnimeViewer.External
                 doc.LoadXml(response);
 
                 AnimeInfo info = new AnimeInfo();
+                info.Id = id;
                 info.Title = doc.SelectSingleNode("/ann/anime[1]/info[@type='Main title']").InnerText;
                 info.Start = doc.SelectSingleNode("/ann/anime[1]/info[@type='Vintage'][1]").InnerText;
                 try
@@ -97,7 +95,7 @@ namespace AnimeViewer.External
         public int id { get; set; }
         public string name { get; set; }
         public string type { get; set; }
-        public animenewsnetworkSearch(int _id, string _name, string _type)
+        public animenewsnetworkSearch(int _id, string _name,string _type)
         {
             id = _id;
             name = _name;
@@ -105,7 +103,7 @@ namespace AnimeViewer.External
         }
         public override string ToString()
         {
-            return name;
+            return type.ToUpper()+" - "+ name;
         }
 
 

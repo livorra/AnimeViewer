@@ -13,7 +13,7 @@
             <Style TargetType="ListBoxItem">
                 <Style.Triggers>
                         <DataTrigger Binding="{Binding Path=Info}" Value="{x:Null}">
-                        <Setter Property="Background" Value="Red" />
+                            <Setter Property="Background" Value="#FFFFC6C6" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
