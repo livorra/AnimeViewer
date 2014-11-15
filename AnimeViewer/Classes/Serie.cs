@@ -51,6 +51,7 @@ namespace AnimeViewer.Classes
             this.path = path;
             this.name = System.IO.Path.GetFileName(path);
             this.chapters = Directory.GetFiles(path).Select(s => new Chapter(s)).ToList();
+            this.chapters.RemoveAll(str => str.Name.Equals("animeviewer.info"));
         }
 
         protected void OnPropertyChanged(string propertyName)
