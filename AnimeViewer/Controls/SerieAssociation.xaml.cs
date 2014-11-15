@@ -30,56 +30,93 @@ namespace AnimeViewer.Controls
             set { SetValue(repositoryProperty, (Repository)value); }
         }
         public static readonly DependencyProperty repositoryProperty = DependencyProperty.Register("repository", typeof(Repository), typeof(SerieAssociation));
+
+        
         public SerieAssociation()
         {
             InitializeComponent();
         }
         public void load()
         {
+            ObservableCollection<SerieAssociationEntity> temp = new ObservableCollection<SerieAssociationEntity>();
+            List<Serie> series = repository.Series;
             if(repository  == null)
             {
-                DGassociation.Visibility = System.Windows.Visibility.Visible;
+                showResults();
                 return;
             }
-            List<Serie> series = repository.Series;
             PBprogress.Maximum = series.Count;
-            ObservableCollection<SerieAssociationEntity> temp = new ObservableCollection<SerieAssociationEntity>();
-            DGassociation.Visibility = System.Windows.Visibility.Hidden;
+
 
             new Thread(new ThreadStart(() =>
                 {
-                    //maybe do a threadpool
-                    //NEED REFACTOR
-                    int i = 0;
+                    Thread[] threads = new Thread[3];
+
+                    int currThread = 0;
                     foreach (Serie serie in series)
                     {
-                        i++;
-                        if (serie.Info == null)
-                            temp.Add(new SerieAssociationEntity(serie.Name));
-                        else
-                            temp.Add(null);
-                        if (i > 3)
-                            break;
-                        this.Dispatcher.Invoke(new dvoid(() =>
+                        while(true)
                         {
-                            PBprogress.Value++;
-                        }));
+                            if (threads[currThread] == null || !threads[currThread].IsAlive)
+                            {
+                                threads[currThread] = new Thread(new ThreadStart(() =>
+                                {
+                                    temp.Add(new SerieAssociationEntity(serie.Name));
+                                    this.Dispatcher.Invoke(new dvoid(() =>
+                                    {
+                                        PBprogress.Value++;
+                                    }));
+                                }));
+                                threads[currThread].Start();
+                                if (currThread == threads.Length - 1)
+                                    currThread = 0;
+                                else
+                                    currThread++;
+                                break;
+                            }
+                            Thread.Sleep(10);
+                        }
+                        
                     }
+                    foreach (Thread hilo in threads)
+                        hilo.Join();
                     this.Dispatcher.Invoke(new dvoid(() =>
                         {
                             DGassociation.DataContext = temp;
-                            DGassociation.Visibility = System.Windows.Visibility.Visible;
-                            Pwait.Visibility = System.Windows.Visibility.Hidden;
-                            
+                            showResults();
                         }));
                 })).Start();
         }
-
+        private void showResults()
+        {
+            Bscan.IsEnabled = true;
+            DGassociation.Visibility = System.Windows.Visibility.Visible;
+            Pwait.Visibility = System.Windows.Visibility.Hidden;
+        }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Pwait.Visibility = System.Windows.Visibility.Visible;
             Bscan.IsEnabled = false;
+            DGassociation.Visibility = System.Windows.Visibility.Hidden;
             load();
         }
+
+        #region listview presentation helper
+        private void DGassociation_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            UpdateColumnsWidth(sender as ListView);
+        }
+        private void UpdateColumnsWidth(ListView listView)
+        {
+            int autoFillColumnIndex = 0;
+            if (listView.ActualWidth == Double.NaN)
+                listView.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
+            double remainingSpace = listView.ActualWidth;
+            for (int i = 0; i < (listView.View as GridView).Columns.Count; i++)
+                if (i != autoFillColumnIndex)
+                    remainingSpace -= (listView.View as GridView).Columns[i].ActualWidth;
+            (listView.View as GridView).Columns[autoFillColumnIndex].Width = remainingSpace >= 0 ? remainingSpace-30 : 0;
+        }
+        #endregion
     }
 }

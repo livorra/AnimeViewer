@@ -8,7 +8,7 @@ namespace AnimeViewer.SupportClasses
 {
     public class SerieAssociationEntity
     {
-        string Name { get; set; }
+        public string Name { get; set; }
         List<animenewsnetworkSearch> posibilities;
 
         public List<animenewsnetworkSearch> Posibilities
