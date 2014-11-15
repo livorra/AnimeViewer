@@ -69,6 +69,10 @@
     <Compile Include="Controls\SerieAssociation.xaml.cs">
       <DependentUpon>SerieAssociation.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SerieInfoControl.xaml.cs">
+      <DependentUpon>SerieInfoControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Converters\EnumerableStringConverter.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -86,6 +90,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\SerieAssociation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SerieInfoControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -19,6 +19,8 @@ namespace AnimeViewer.Classes
         public Dictionary<int, string> OfficialEpisodes { get; set; }
         public AnimeInfo()
         {
+            Genres = new List<string>();
+            OfficialEpisodes = new Dictionary<int, string>();
         }
         public AnimeInfo(string _title, List<string> _genres, string _start, string _web, string _screenShot, string _description, Dictionary<int, string> _officialEpisodes)
         {

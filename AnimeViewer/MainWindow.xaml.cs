@@ -18,7 +18,8 @@ namespace AnimeViewer
 	/// Lógica de interacción para MainWindow.xaml
 	/// </summary>
     public partial class MainWindow : Window
-	{
+    {
+        #region dependency propierties
         public List<Repository> Repositories
         {
             get { return (List<Repository>)GetValue(RepositoriesProperty); }
@@ -45,12 +46,11 @@ namespace AnimeViewer
             set { SetValue(CurrentChapterProperty, (Chapter)value); }
         }
         public static readonly DependencyProperty CurrentChapterProperty = DependencyProperty.Register("CurrentChapter", typeof(Chapter), typeof(MainWindow));
-		
+        #endregion
         public MainWindow()
 		{
 			this.InitializeComponent();
 		}
-
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Repositories.Add(new Repository("G:\\Anime"));

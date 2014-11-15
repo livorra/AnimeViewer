@@ -47,35 +47,49 @@ namespace AnimeViewer.External
         }
         public static Classes.AnimeInfo getInformation(int id)
         {
-            string response = Connections.GetResponse(Properties.Settings.Default.InformationApiUrl + id.ToString());
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(response);
+            try
+            {
+                string response = Connections.GetResponse(Properties.Settings.Default.InformationApiUrl + id.ToString());
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml(response);
 
-            AnimeInfo info = new AnimeInfo();
-            info.Title = doc.SelectSingleNode("/ann/anime[1]/info[@type='Main title']").InnerText;
-            info.Start = doc.SelectSingleNode("/ann/anime[1]/info[@type='Vintage'][1]").InnerText;
-            info.Web = doc.SelectSingleNode("/ann/anime[1]/info[@type='Official website'][1]").Attributes["href"].Value;
-            XmlNodeList genreList = doc.SelectNodes("/ann/anime[1]/info[@type='Themes'] | /ann/anime[1]/info[@type='Genres']");
-            foreach (XmlNode genre in genreList)
-            {
-                info.Genres.Add(genre.InnerText);
-            }
-            XmlNodeList episodes = doc.SelectNodes("/ann/anime[1]/episode");
-            foreach (XmlNode episode in episodes)
-            {
-                int number;
-                if (int.TryParse(episode.Attributes["num"].Value, out number))
+                AnimeInfo info = new AnimeInfo();
+                info.Title = doc.SelectSingleNode("/ann/anime[1]/info[@type='Main title']").InnerText;
+                info.Start = doc.SelectSingleNode("/ann/anime[1]/info[@type='Vintage'][1]").InnerText;
+                try
                 {
-                    string title = episode.FirstChild.InnerText;
-                    if (number > 0)
-                        info.OfficialEpisodes.Add(number, title);
+                    info.Web = doc.SelectSingleNode("/ann/anime[1]/info[@type='Official website'][1]").Attributes["href"].Value;
                 }
+                catch
+                {
+                }
+                XmlNodeList genreList = doc.SelectNodes("/ann/anime[1]/info[@type='Themes'] | /ann/anime[1]/info[@type='Genres']");
+                foreach (XmlNode genre in genreList)
+                {
+                    info.Genres.Add(genre.InnerText);
+                }
+                XmlNodeList episodes = doc.SelectNodes("/ann/anime[1]/episode");
+                foreach (XmlNode episode in episodes)
+                {
+                    int number;
+                    if (int.TryParse(episode.Attributes["num"].Value, out number))
+                    {
+                        string title = episode.FirstChild.InnerText;
+                        if (number > 0)
+                            info.OfficialEpisodes.Add(number, title);
+                    }
+                }
+                string screenshotUrl = doc.SelectSingleNode("/ann/anime[1]/info[@type='Picture'][1]").Attributes["src"].Value;
+                info.ScreenShot = Properties.Settings.Default.ImagesPath + "\\" + id + ".jpg";
+                Connections.downloadFile(screenshotUrl, info.ScreenShot, false);
+                info.Description = doc.SelectSingleNode("/ann/anime[1]/info[@type='Plot Summary']").InnerText;
+
+                return info;
             }
-            string screenshotUrl = doc.SelectSingleNode("/ann/anime[1]/info[@type='Picture'][1]").Attributes["src"].Value;
-            info.ScreenShot = Properties.Settings.Default.ImagesPath + "\\" + Guid.NewGuid().ToString().Replace("-", "") + ".jpg";
-            Connections.downloadFile(screenshotUrl, info.ScreenShot);
-            info.Description = doc.SelectSingleNode("/ann/anime[1]/info[@type='Plot Summary']").InnerText;
-            return info;
+            catch
+            {
+                return null;
+            }
         }
     }
     public class animenewsnetworkSearch

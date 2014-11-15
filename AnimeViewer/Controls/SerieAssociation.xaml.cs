@@ -1,4 +1,5 @@
 ﻿using AnimeViewer.Classes;
+using AnimeViewer.External;
 using AnimeViewer.SupportClasses;
 using System;
 using System.Collections.Generic;
@@ -24,12 +25,20 @@ namespace AnimeViewer.Controls
     public partial class SerieAssociation : UserControl
     {
         private delegate void dvoid();
+        ObservableCollection<SerieAssociationEntity> temp = new ObservableCollection<SerieAssociationEntity>();
         public Repository repository
         {
             get { return (Repository)GetValue(repositoryProperty); }
             set { SetValue(repositoryProperty, (Repository)value); }
         }
         public static readonly DependencyProperty repositoryProperty = DependencyProperty.Register("repository", typeof(Repository), typeof(SerieAssociation));
+
+        public AnimeInfo lastSearchSelected
+        {
+            get { return (AnimeInfo)GetValue(lastSearchSelectedProperty); }
+            set { SetValue(lastSearchSelectedProperty, (AnimeInfo)value); }
+        }
+        public static readonly DependencyProperty lastSearchSelectedProperty = DependencyProperty.Register("lastSearchSelected", typeof(AnimeInfo), typeof(SerieAssociation));
 
         
         public SerieAssociation()
@@ -38,23 +47,26 @@ namespace AnimeViewer.Controls
         }
         public void load()
         {
-            ObservableCollection<SerieAssociationEntity> temp = new ObservableCollection<SerieAssociationEntity>();
-            List<Serie> series = repository.Series;
             if(repository  == null)
             {
                 showResults();
                 return;
             }
+           
+            List<Serie> series = repository.Series;
             PBprogress.Maximum = series.Count;
-
 
             new Thread(new ThreadStart(() =>
                 {
-                    Thread[] threads = new Thread[3];
+                    Thread[] threads = new Thread[5];
 
+                    int max = 0;
                     int currThread = 0;
                     foreach (Serie serie in series)
                     {
+                        max++;
+                        if (max > 5)
+                            break;
                         while(true)
                         {
                             if (threads[currThread] == null || !threads[currThread].IsAlive)
@@ -65,6 +77,7 @@ namespace AnimeViewer.Controls
                                     this.Dispatcher.Invoke(new dvoid(() =>
                                     {
                                         PBprogress.Value++;
+                                        Lprogress.Text = "Obtained posibilities for " +serie.Name + " ["+ PBprogress.Value + " of " + PBprogress.Maximum+"]";
                                     }));
                                 }));
                                 threads[currThread].Start();
@@ -90,17 +103,20 @@ namespace AnimeViewer.Controls
         private void showResults()
         {
             Bscan.IsEnabled = true;
-            DGassociation.Visibility = System.Windows.Visibility.Visible;
             Pwait.Visibility = System.Windows.Visibility.Hidden;
+            PScaned.Visibility = System.Windows.Visibility.Visible;
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Pwait.Visibility = System.Windows.Visibility.Visible;
             Bscan.IsEnabled = false;
-            DGassociation.Visibility = System.Windows.Visibility.Hidden;
+            PScaned.Visibility = System.Windows.Visibility.Hidden;
             load();
         }
+        private void Bsave_Click(object sender, RoutedEventArgs e)
+        {
 
+        }
         #region listview presentation helper
         private void DGassociation_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -117,6 +133,26 @@ namespace AnimeViewer.Controls
                     remainingSpace -= (listView.View as GridView).Columns[i].ActualWidth;
             (listView.View as GridView).Columns[autoFillColumnIndex].Width = remainingSpace >= 0 ? remainingSpace-30 : 0;
         }
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            animenewsnetworkSearch selected = ((ComboBox)e.Source).SelectedItem as animenewsnetworkSearch;
+            if (selected == null)
+                return;
+            new Thread(new ThreadStart(() =>
+            {
+
+                AnimeInfo info = Animenewsnetwork.getInformation(selected.id);
+                this.Dispatcher.Invoke(new dvoid(() =>
+                {
+                    lastSearchSelected = info;
+                }));
+            })).Start();
+
+        }
         #endregion
+
+        
+
+
     }
 }

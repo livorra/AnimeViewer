@@ -1,36 +1,39 @@
-﻿<UserControl x:Class="AnimeViewer.Controls.SerieAssociation"
+﻿<UserControl
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AnimeViewer.Controls" x:Class="AnimeViewer.Controls.SerieAssociation" 
              x:Name="serieassociation"
-             mc:Ignorable="d" Height="532" Width="822">
+             mc:Ignorable="d" Height="499" Width="886">
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="ForegroundInfo" Color="White"/>
+    </UserControl.Resources>
+
     <Grid>
-        <Grid x:Name="Pwait" Height="199" Margin="0,115,0,81" VerticalAlignment="Center" Visibility="Hidden">
+        <Grid x:Name="Pwait" Height="266" Margin="0,156,0,110" VerticalAlignment="Center" Visibility="Hidden">
             <TextBlock Margin="0,62,0,41" TextWrapping="Wrap" Text="Please wait until the scanner find your downloaded anime" FontSize="36" Foreground="{DynamicResource LabelForegroundDecription}" VerticalAlignment="Center" TextAlignment="Center"/>
-            <ProgressBar x:Name="PBprogress" HorizontalAlignment="Center" Height="8" Margin="10,181,10,10" VerticalAlignment="Center" Width="727"/>
+            <ProgressBar x:Name="PBprogress" HorizontalAlignment="Center" Height="8" Margin="10,181,10,10" VerticalAlignment="Center" Width="500"/>
+            <TextBlock x:Name="Lprogress" Text="" HorizontalAlignment="Center" Margin="10,210,10,10" VerticalAlignment="Center" Width="500" Foreground="{DynamicResource ForegroundInfo}" RenderTransformOrigin="9.3,-0.423"/>
         </Grid>
-        <Button x:Name="Bscan" HorizontalAlignment="Center" Margin="0,30,0,0" VerticalAlignment="Top" Width="370" Height="87" FontSize="36" Content="Scan Repository" Click="Button_Click" />
-        <ListView x:Name="DGassociation" Margin="10,137,10,175" ItemsSource="{Binding}" SizeChanged="DGassociation_SizeChanged">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Serie" Width="auto" DisplayMemberBinding="{Binding Path=Name}" x:Name="FillColumn" />
-                    <GridViewColumn Width="400" Header="Posibilities">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <ComboBox ItemsSource="{Binding Path=Posibilities}" MinWidth="370" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Info" Width="50" >
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock>+Info</TextBlock>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
+        <Button x:Name="Bscan" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Width="370" Height="87" FontSize="36" Content="Scan Repository" Click="Button_Click" />
+        <Grid x:Name="PScaned">
+            <ListView x:Name="DGassociation" Margin="10,102,10,301" ItemsSource="{Binding}" SizeChanged="DGassociation_SizeChanged">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Serie" Width="auto" DisplayMemberBinding="{Binding Name}" x:Name="FillColumn" />
+                        <GridViewColumn Width="400" Header="Posibilities">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ComboBox ItemsSource="{Binding Posibilities}" MinWidth="370" SelectionChanged="ComboBox_SelectionChanged" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <local:SerieInfoControl x:Name="SIserieInfo" Info="{Binding ElementName=serieassociation,Path=lastSearchSelected}" VerticalAlignment="Bottom" Height="262" Width="Auto" Background="#33000000" Margin="10,0" />
+            <Button x:Name="Bsave" HorizontalAlignment="Left" Margin="10,0,0,267" VerticalAlignment="Bottom" Width="105" Height="29" FontSize="18" Content="Save" Click="Button_Click"  />
+        </Grid>
     </Grid>
 </UserControl>

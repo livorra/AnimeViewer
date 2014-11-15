@@ -8,5 +8,6 @@
         <SolidColorBrush x:Key="LabelForegroundDecription" Color="#FFDE7024"/>
         <Color x:Key="ForeGroundDatagrid">#FFF0741E</Color>
         <Color x:Key="ForegroundDatagridLink">#FF536EEC</Color>
+        <SolidColorBrush x:Key="Link" Color="#FF6269FF"/>
     </Application.Resources>
 </Application>
