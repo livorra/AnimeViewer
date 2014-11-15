@@ -24,7 +24,14 @@ namespace AnimeViewer.Classes
         {
 
             this.path = path;
-            this.series = Directory.GetDirectories(path).Select(s => new Serie(s)).ToList();
+            if (path != null)
+                this.series = Directory.GetDirectories(path).Select(s => new Serie(s)).ToList();
+            else
+                this.series = new List<Serie>();
+        }
+        public static Repository CreateVoid()
+        {
+            return new Repository(null);
         }
 
     }

@@ -11,7 +11,7 @@ namespace AnimeViewer.Support
     {
         public static string GetResponse(string url)
         {
-            using (WebClient wc = new WebClient())
+            using (WebClient wc = new WebClient() { Proxy = null })
             {
                 return wc.DownloadString(url);
             }
@@ -20,7 +20,7 @@ namespace AnimeViewer.Support
         {
             if (!Directory.Exists(Path.GetDirectoryName(filename)))
                 Directory.CreateDirectory(Path.GetDirectoryName(filename));
-            using (WebClient wc = new WebClient())
+            using (WebClient wc = new WebClient() { Proxy = null})
             {
                 wc.DownloadFile(url, filename);
             }

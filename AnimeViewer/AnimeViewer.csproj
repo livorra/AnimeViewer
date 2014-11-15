@@ -66,11 +66,15 @@
     <Compile Include="Controls\RightPanel.xaml.cs">
       <DependentUpon>RightPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SerieAssociation.xaml.cs">
+      <DependentUpon>SerieAssociation.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="SupportClasses\SerieAssociationEntity.cs" />
     <Compile Include="Support\Connections.cs" />
     <Compile Include="Support\Files.cs" />
     <Page Include="Controls\LeftPanel.xaml">
@@ -78,6 +82,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\RightPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SerieAssociation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

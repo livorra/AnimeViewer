@@ -6,5 +6,7 @@
     <Application.Resources>
         <!-- Debe definir aquí los recursos en el ámbito del nivel de aplicación. -->
         <SolidColorBrush x:Key="LabelForegroundDecription" Color="#FFDE7024"/>
+        <Color x:Key="ForeGroundDatagrid">#FFF0741E</Color>
+        <Color x:Key="ForegroundDatagridLink">#FF536EEC</Color>
     </Application.Resources>
 </Application>

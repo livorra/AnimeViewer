@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="AnimeViewer.Controls.SerieAssociation"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             x:Name="serieassociation"
+             mc:Ignorable="d" Height="439" Width="822">
+    <Grid>
+        <Grid x:Name="Pwait" Height="199" Margin="0,115,0,81" VerticalAlignment="Center" Visibility="Hidden">
+            <TextBlock Margin="0,62,0,41" TextWrapping="Wrap" Text="Please wait until the scanner find your downloaded anime" FontSize="36" Foreground="{DynamicResource LabelForegroundDecription}" VerticalAlignment="Center" TextAlignment="Center"/>
+            <ProgressBar x:Name="PBprogress" HorizontalAlignment="Center" Height="8" Margin="10,181,10,10" VerticalAlignment="Center" Width="727"/>
+        </Grid>
+        <Button x:Name="Bscan" HorizontalAlignment="Center" Margin="0,30,0,0" VerticalAlignment="Top" Width="370" Height="87" FontSize="36" Content="Scan Repository" Click="Button_Click" />
+        <DataGrid x:Name="DGassociation" Margin="10" Visibility="Hidden" AutoGenerateColumns="False" ItemsSource="{Binding}">
+            <DataGrid.Columns>
+                <DataGridTextColumn  Binding="{Binding Path=Name}" Header="Serie" Width="*"/>
+                <DataGridComboBoxColumn ItemsSource="{Binding Posibilities}" ClipboardContentBinding="{x:Null}" SelectedValueBinding="{x:Null}" SelectedItemBinding="{x:Null}" TextBinding="{x:Null}" Header="Posibilities" Width="*"/>
+                <DataGridTextColumn ClipboardContentBinding="{x:Null}" Header="Preview" Width="60"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+
+
+    </Grid>
+</UserControl>

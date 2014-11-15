@@ -26,6 +26,12 @@ namespace AnimeViewer
         }
         public static readonly DependencyProperty RepositoriesProperty = DependencyProperty.Register("Repositories", typeof(List<Repository>), typeof(MainWindow),new PropertyMetadata(new List<Repository>()));
 
+        public Repository CurrentRepository
+        {
+            get { return (Repository)GetValue(RepositoryProperty); }
+            set { SetValue(RepositoryProperty, (Repository)value); }
+        }
+        public static readonly DependencyProperty RepositoryProperty = DependencyProperty.Register("CurrentRepository", typeof(Repository), typeof(MainWindow));
         public Serie CurrentSerie
         {
             get { return (Serie)GetValue(CurrentSerieProperty); }

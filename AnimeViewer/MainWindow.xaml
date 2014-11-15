@@ -8,19 +8,23 @@
 	Width="1297.479" Height="727.395" Loaded="Window_Loaded">
 
     <Grid x:Name="LayoutRoot" Background="#FF2D2D30">
-        <Controls:LeftPanel x:Name="PleftPanel" HorizontalAlignment="Left" Height="Auto" Margin="0,0,0,62" Width="281" Background="#33000000" SelectedSerie="{Binding ElementName=Window,Path=CurrentSerie,Mode=TwoWay}" Repositories="{Binding ElementName=Window,Path=Repositories}"/>
+        <Controls:LeftPanel x:Name="PleftPanel" HorizontalAlignment="Left" Height="Auto" Margin="0,0,0,62" Width="281" Background="#33000000" SelectedSerie="{Binding ElementName=Window,Path=CurrentSerie,Mode=TwoWay}" SelectedRepository="{Binding ElementName=Window,Path=CurrentRepository,Mode=TwoWay}" Repositories="{Binding ElementName=Window,Path=Repositories}"/>
         <Controls:RightPanel Serie="{Binding ElementName=Window,Path=CurrentSerie}" SelectedChapter="{Binding ElementName=Window,Path=CurrentChapter,Mode=TwoWay}" HorizontalAlignment="Right" Margin="0,0,0,62" Height="Auto" Background="#33000000"/>
         <Grid Height="62" VerticalAlignment="Bottom" Background="#66000000"/>
-        <TabControl Margin="281,0,296,67" Background="#00F9F9F9" BorderThickness="0">
+        <TabControl x:Name="TCtab" Margin="281,0,296,67" Background="#00F9F9F9" BorderThickness="0">
             <TabItem Header="Start">
                 <Grid />
             </TabItem>
-            <TabItem Header="Repositories management">
-                <Grid/>
+            <TabItem Header="Associate series
+                     ">
+                <Grid>
+                    <Controls:SerieAssociation x:Name="PserieAssociation" Margin="0" Width="Auto" Height="Auto" repository="{Binding ElementName=Window,Path=CurrentRepository}" />
+                </Grid>
             </TabItem>
             <TabItem Header="Configuration">
                 <Grid/>
             </TabItem>
+            
         </TabControl>
     </Grid>
 </Window>
