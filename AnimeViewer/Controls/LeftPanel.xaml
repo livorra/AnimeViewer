@@ -8,7 +8,17 @@
     <Grid>
         <ComboBox x:Name="CBrepositories" Margin="10,49,10,0" VerticalAlignment="Top" SelectedItem="{Binding ElementName=leftPanel,Path=SelectedRepository,Mode=OneWayToSource}" ItemsSource="{Binding ElementName=leftPanel,Path=Repositories,Mode=OneWay}" DisplayMemberPath="Path" />
         <Label Content="Repositories" HorizontalAlignment="Left" Margin="10,18,0,0" VerticalAlignment="Top" Foreground="{DynamicResource LabelForegroundDecription}"/>
-        <ListBox x:Name="LBseries"  Margin="10,111,10,10" ItemsSource="{Binding ElementName=leftPanel,Path=SelectedRepository.Series,Mode=OneWay}" DisplayMemberPath="Name" SelectedItem="{Binding ElementName=leftPanel,Path=SelectedSerie}"  />
+        <ListBox x:Name="LBseries"  Margin="10,111,10,10" ItemsSource="{Binding ElementName=leftPanel,Path=SelectedRepository.Series,Mode=OneWay}" DisplayMemberPath="Name" SelectedItem="{Binding ElementName=leftPanel,Path=SelectedSerie}">
+            <ListBox.Resources>
+            <Style TargetType="ListBoxItem">
+                <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=Info}" Value="{x:Null}">
+                        <Setter Property="Background" Value="Red" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+            </ListBox.Resources>
+        </ListBox>
         <Label Content="Series" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top" Foreground="{DynamicResource LabelForegroundDecription}"/>
 
     </Grid>

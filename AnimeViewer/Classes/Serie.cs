@@ -29,17 +29,7 @@ namespace AnimeViewer.Classes
         {
             get
             {
-                string content = Files.ReadFile(System.IO.Path.Combine(path, Properties.Settings.Default.SerieInfoFile));
-                if (content == null)
-                    return null;
-                try
-                {
-                    return JsonConvert.DeserializeObject<AnimeInfo>(content);
-                }
-                catch
-                {
-                    return null;
-                }
+                return AnimeInfo.createNewFromFile(System.IO.Path.Combine(path, Properties.Settings.Default.SerieInfoFile));
             }
             set
             {

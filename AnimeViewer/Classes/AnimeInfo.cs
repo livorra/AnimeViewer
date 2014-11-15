@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AnimeViewer.Support;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -31,6 +33,20 @@ namespace AnimeViewer.Classes
         public override string ToString()
         {
             return Title;
+        }
+        public static AnimeInfo createNewFromFile(string filename)
+        {
+            string content = Files.ReadFile(filename);
+            if (content == null)
+                return null;
+            try
+            {
+                return JsonConvert.DeserializeObject<AnimeInfo>(content);
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }
