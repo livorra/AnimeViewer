@@ -77,8 +77,8 @@ namespace AnimeViewer.Controls
                         {
                             Serie serie = repository.Series.FirstOrDefault(o => o.Name == currentElement.Serie.Name);
                             serie.Info = newInfo;
-                            PBprogress.Value = i + 1;
-                            Lprogress.Text = "Updated " + serie.Name + " [" + i + 1 + " of " + PBprogress.Maximum + "]";
+                            PBprogress.Value = (i + 1);
+                            Lprogress.Text = "Updated " + serie.Name;
                         }));
 
                     }
@@ -95,6 +95,7 @@ namespace AnimeViewer.Controls
             this.Dispatcher.Invoke(new dvoid(() =>
             {
                 TBMessage.Text = Properties.Settings.Default.MessageUpdated;
+                Lprogress.Text = "Completed";
             }));
 
         }
@@ -210,7 +211,6 @@ namespace AnimeViewer.Controls
                 showAnmeNetworkSearch(selected.SelectedOfferId);
         }
         #endregion
-
         private void BchangeName_Click(object sender, RoutedEventArgs e)
         {
             TBnewName.Text = string.Empty;
@@ -221,12 +221,10 @@ namespace AnimeViewer.Controls
 
             GchangeName.Visibility = System.Windows.Visibility.Visible;
         }
-
         private void Button_GchangeName_close(object sender, RoutedEventArgs e)
         {
             GchangeName.Visibility = System.Windows.Visibility.Hidden;
         }
-
         private void TBnewName_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)

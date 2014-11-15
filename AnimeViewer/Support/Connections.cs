@@ -11,7 +11,7 @@ namespace AnimeViewer.Support
     {
         public static string GetResponse(string url)
         {
-            using (WebClient wc = new WebClient() { Proxy = null })
+            using (WebClient wc = new WebClient() { Proxy = null, Encoding = System.Text.Encoding.UTF8 })
             {
                 return wc.DownloadString(url);
             }
