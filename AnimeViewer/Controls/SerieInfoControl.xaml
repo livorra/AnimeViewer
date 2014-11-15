@@ -12,7 +12,7 @@
         <Converters:StringImageConverter x:Key="StringImageConverter"/>
         <SolidColorBrush x:Key="ForegroundAlternative" Color="White"/>
     </UserControl.Resources>
-    <Grid Grid.Row="1" Grid.Column="2">
+    <Grid x:Name="Gcontent" Grid.Row="1" Grid.Column="2">
         <Grid.RowDefinitions>
             <RowDefinition Height="20"></RowDefinition>
             <RowDefinition Height="50"></RowDefinition>

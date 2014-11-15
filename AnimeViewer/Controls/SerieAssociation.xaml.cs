@@ -45,6 +45,59 @@ namespace AnimeViewer.Controls
         {
             InitializeComponent();
         }
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Pwait.Visibility = System.Windows.Visibility.Visible;
+            Bscan.IsEnabled = false;
+            PScaned.Visibility = System.Windows.Visibility.Hidden;
+            load();
+        }
+        private void Bsave_Click(object sender, RoutedEventArgs e)
+        {
+            hideResults();
+            PBprogress.Maximum = DGassociation.Items.Count;
+            PBprogress.Value = 0;
+            TBMessage.Text = Properties.Settings.Default.MessageUpdating;
+
+            new Thread(new ThreadStart(() =>
+            {
+                for (int i = 0; i < DGassociation.Items.Count; i++)
+                {
+                    SerieAssociationEntity currentElement = DGassociation.Items[i] as SerieAssociationEntity;
+                    if (currentElement != null && currentElement.SelectedOfferId != null)
+                    {
+                        int selectedId = currentElement.SelectedOfferId.id;
+                        AnimeInfo newInfo;
+                        if (selectedId == -1)
+                            newInfo = null;
+                        else
+                            newInfo = Animenewsnetwork.getInformation(selectedId);
+
+                        this.Dispatcher.Invoke(new dvoid(() =>
+                        {
+                            Serie serie = repository.Series.FirstOrDefault(o => o.Name == currentElement.Serie.Name);
+                            serie.Info = newInfo;
+                            PBprogress.Value = i + 1;
+                            Lprogress.Text = "Updated " + serie.Name + " [" + i + 1 + " of " + PBprogress.Maximum + "]";
+                        }));
+
+                    }
+                    else
+                    {
+                        this.Dispatcher.Invoke(new dvoid(() =>
+                        {
+                            PBprogress.Value = i + 1;
+                        }));
+                    }
+
+                }
+            })).Start();
+            this.Dispatcher.Invoke(new dvoid(() =>
+            {
+                TBMessage.Text = Properties.Settings.Default.MessageUpdated;
+            }));
+
+        }
         public void load()
         {
             if(repository  == null)
@@ -112,58 +165,21 @@ namespace AnimeViewer.Controls
             Pwait.Visibility = System.Windows.Visibility.Visible;
             PScaned.Visibility = System.Windows.Visibility.Hidden;
         }
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void showAnmeNetworkSearch(animenewsnetworkSearch selected)
         {
-            Pwait.Visibility = System.Windows.Visibility.Visible;
-            Bscan.IsEnabled = false;
-            PScaned.Visibility = System.Windows.Visibility.Hidden;
-            load();
-        }
-        private void Bsave_Click(object sender, RoutedEventArgs e)
-        {
-            hideResults();
-            PBprogress.Maximum = DGassociation.Items.Count;
-            PBprogress.Value = 0;
-            TBMessage.Text = Properties.Settings.Default.MessageUpdating;
-
+            if (selected == null)
+                return;
             new Thread(new ThreadStart(() =>
-                {
-                    for (int i = 0; i < DGassociation.Items.Count; i++)
-                    {
-                        SerieAssociationEntity currentElement = DGassociation.Items[i] as SerieAssociationEntity;
-                        if (currentElement != null && currentElement.SelectedOfferId != null)
-                        {
-                            int selectedId = currentElement.SelectedOfferId.id;
-                            AnimeInfo newInfo;
-                            if (selectedId == -1)
-                                newInfo = null;
-                            else
-                                newInfo = Animenewsnetwork.getInformation(selectedId);
-
-                            this.Dispatcher.Invoke(new dvoid(() =>
-                                {
-                                    Serie serie = repository.Series.FirstOrDefault(o => o.Name == currentElement.Serie.Name);
-                                    serie.Info = newInfo;
-                                    PBprogress.Value =i+1;
-                                    Lprogress.Text = "Updated " + serie.Name + " [" + i+1 + " of " + PBprogress.Maximum + "]";
-                                }));
-
-                        }
-                        else 
-                        {
-                            this.Dispatcher.Invoke(new dvoid(() =>
-                               {
-                                   PBprogress.Value = i + 1;
-                               }));
-                        }
-
-                    }
-                })).Start();
-            this.Dispatcher.Invoke(new dvoid(() =>
             {
-                TBMessage.Text = Properties.Settings.Default.MessageUpdated;
-            }));
-            
+                if (selected.id == -1)
+                    return;
+                AnimeInfo info = Animenewsnetwork.getInformation(selected.id);
+
+                this.Dispatcher.Invoke(new dvoid(() =>
+                {
+                    lastSearchSelected = info;
+                }));
+            })).Start();
         }
         #region listview presentation helper
         private void DGassociation_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -193,23 +209,37 @@ namespace AnimeViewer.Controls
             if(selected != null)
                 showAnmeNetworkSearch(selected.SelectedOfferId);
         }
-        private void showAnmeNetworkSearch(animenewsnetworkSearch selected)
-        {
-            if (selected == null)
-                return;
-            new Thread(new ThreadStart(() =>
-            {
-                if (selected.id == -1)
-                    return;
-                AnimeInfo info = Animenewsnetwork.getInformation(selected.id);
-                
-                this.Dispatcher.Invoke(new dvoid(() =>
-                {
-                    lastSearchSelected = info;
-                }));
-            })).Start();
-        }
         #endregion
+
+        private void BchangeName_Click(object sender, RoutedEventArgs e)
+        {
+            TBnewName.Text = string.Empty;
+            Button send = sender as Button;
+            Point relativePoint = send.TransformToAncestor(serieassociation).Transform(new Point(0, 0));
+            GchangeName.Margin = new Thickness( relativePoint.X,relativePoint.Y-GchangeName.Height,0,0);
+            GchangeName.Tag = send.Tag;
+
+            GchangeName.Visibility = System.Windows.Visibility.Visible;
+        }
+
+        private void Button_GchangeName_close(object sender, RoutedEventArgs e)
+        {
+            GchangeName.Visibility = System.Windows.Visibility.Hidden;
+        }
+
+        private void TBnewName_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                GchangeName.Visibility = System.Windows.Visibility.Hidden;
+                SerieAssociationEntity entityToModify = GchangeName.Tag as SerieAssociationEntity;
+                entityToModify.Posibilities = Animenewsnetwork.GetPosibleNames(TBnewName.Text);
+            }
+            else if(e.Key == Key.Escape)
+            {
+                GchangeName.Visibility = System.Windows.Visibility.Hidden;
+            }
+        }
 
 
         

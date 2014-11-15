@@ -22,6 +22,13 @@
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Serie" Width="auto" DisplayMemberBinding="{Binding Serie.Name}" x:Name="FillColumn" />
+                        <GridViewColumn Width="130" Header="Name">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Find with other name" x:Name="BchangeName" Click="BchangeName_Click" Tag="{Binding}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                         <GridViewColumn Width="400" Header="Posibilities">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
@@ -34,6 +41,10 @@
             </ListView>
             <local:SerieInfoControl x:Name="SIserieInfo" Info="{Binding ElementName=serieassociation,Path=lastSearchSelected}" VerticalAlignment="Bottom" Height="262" Width="Auto" Background="#33000000" Margin="10,0" />
             <Button x:Name="Bsave" HorizontalAlignment="Left" Margin="10,0,0,267" VerticalAlignment="Bottom" Width="105" Height="29" FontSize="18" Content="Save" Click="Bsave_Click"  />
+        </Grid>
+        <Grid x:Name="GchangeName" HorizontalAlignment="Left" Height="46" Margin="161,140,0,0" VerticalAlignment="Top" Width="280" Background="#501B1B1D" Visibility="Hidden">
+            <TextBox x:Name="TBnewName" HorizontalAlignment="Left" Height="27" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="234" Margin="10,10,0,0" KeyDown="TBnewName_KeyDown"/>
+            <Button Content="X" HorizontalAlignment="Left" Margin="249,10,0,10" Width="24" Click="Button_GchangeName_close" RenderTransformOrigin="1.542,0.529"/>
         </Grid>
     </Grid>
 </UserControl>

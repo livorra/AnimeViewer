@@ -16,6 +16,7 @@
                             <Setter Property="Background" Value="#FFFFC6C6" />
                     </DataTrigger>
                 </Style.Triggers>
+              
             </Style>
             </ListBox.Resources>
         </ListBox>
