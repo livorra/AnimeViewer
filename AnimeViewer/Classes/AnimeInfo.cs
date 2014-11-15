@@ -6,7 +6,7 @@ using System.Text;
 
 namespace AnimeViewer.Classes
 {
-    class AnimeInfo: INotifyPropertyChanged 
+    public class AnimeInfo
     {
         public string Title { get; set; }
         public List<string> Genres { get; set; }
@@ -32,7 +32,5 @@ namespace AnimeViewer.Classes
         {
             return Title;
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

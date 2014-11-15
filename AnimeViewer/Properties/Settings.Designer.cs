@@ -59,5 +59,17 @@ namespace AnimeViewer.Properties {
                 this["ImagesPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("animeviewer.info")]
+        public string SerieInfoFile {
+            get {
+                return ((string)(this["SerieInfoFile"]));
+            }
+            set {
+                this["SerieInfoFile"] = value;
+            }
+        }
     }
 }

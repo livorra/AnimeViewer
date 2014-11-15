@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
+using AnimeViewer.Support;
 
 namespace AnimeViewer.Classes
 {
@@ -23,7 +25,27 @@ namespace AnimeViewer.Classes
         {
             get { return chapters; }
         }
-
+        public AnimeInfo Info
+        {
+            get
+            {
+                string content = Files.ReadFile(System.IO.Path.Combine(path, Properties.Settings.Default.SerieInfoFile));
+                if (content == null)
+                    return null;
+                try
+                {
+                    return JsonConvert.DeserializeObject<AnimeInfo>(content);
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                Files.WriteFile(System.IO.Path.Combine(path,Properties.Settings.Default.SerieInfoFile),JsonConvert.SerializeObject(value));
+            }
+        }
 
 
         public Serie(string path)
