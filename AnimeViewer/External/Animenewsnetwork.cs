@@ -80,7 +80,11 @@ namespace AnimeViewer.External
                 string screenshotUrl = doc.SelectSingleNode("/ann/anime[1]/info[@type='Picture'][1]").Attributes["src"].Value;
                 info.ScreenShot = Properties.Settings.Default.ImagesPath + "\\" + id + ".jpg";
                 Connections.downloadFile(screenshotUrl, info.ScreenShot, false);
-                info.Description = doc.SelectSingleNode("/ann/anime[1]/info[@type='Plot Summary']").InnerText;
+                var des = doc.SelectSingleNode("/ann/anime[1]/info[@type='Plot Summary']");
+                if (des != null)
+                    info.Description = des.InnerText;
+                else
+                    info.Description = "";
 
                 return info;
             }

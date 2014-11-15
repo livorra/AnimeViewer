@@ -16,7 +16,7 @@
             <ProgressBar x:Name="PBprogress" HorizontalAlignment="Center" Height="8" Margin="10,181,10,10" VerticalAlignment="Center" Width="500"/>
             <TextBlock x:Name="Lprogress" Text="" HorizontalAlignment="Center" Margin="10,210,10,10" VerticalAlignment="Center" Width="500" Foreground="{DynamicResource ForegroundInfo}" RenderTransformOrigin="9.3,-0.423"/>
         </Grid>
-        <Button x:Name="Bscan" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Width="370" Height="87" FontSize="36" Content="Scan Repository" Click="Button_Click" />
+        <Button x:Name="Bscan" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Width="370" Height="42" FontSize="24" Content="Scan Repository" Click="Button_Click" FontWeight="Bold" />
         <Grid x:Name="PScaned" Visibility="Hidden">
             <ListView x:Name="DGassociation" Margin="10,102,10,301" ItemsSource="{Binding}" SizeChanged="DGassociation_SizeChanged" SelectionChanged="DGassociation_SelectionChanged">
                 <ListView.View>
