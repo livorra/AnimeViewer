@@ -14,8 +14,14 @@
     <Setting Name="SerieInfoFile" Type="System.String" Scope="User">
       <Value Profile="(Default)">animeviewer.info</Value>
     </Setting>
-    <Setting Name="MessageUnatachSerie" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Are you sure you want to unatach this serie?</Value>
+    <Setting Name="MessageScanningSeries" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Please wait until the scanner find your downloaded anime</Value>
+    </Setting>
+    <Setting Name="MessageUpdating" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Please wait until the scanner update yout series</Value>
+    </Setting>
+    <Setting Name="MessageUpdated" Type="System.String" Scope="User">
+      <Value Profile="(Default)">The series attachment has ended correctly</Value>
     </Setting>
   </Settings>
 </SettingsFile>

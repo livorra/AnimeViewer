@@ -74,13 +74,37 @@ namespace AnimeViewer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Are you sure you want to unatach this serie?")]
-        public string MessageUnatachSerie {
+        [global::System.Configuration.DefaultSettingValueAttribute("Please wait until the scanner find your downloaded anime")]
+        public string MessageScanningSeries {
             get {
-                return ((string)(this["MessageUnatachSerie"]));
+                return ((string)(this["MessageScanningSeries"]));
             }
             set {
-                this["MessageUnatachSerie"] = value;
+                this["MessageScanningSeries"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Please wait until the scanner update yout series")]
+        public string MessageUpdating {
+            get {
+                return ((string)(this["MessageUpdating"]));
+            }
+            set {
+                this["MessageUpdating"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("The series attachment has ended correctly")]
+        public string MessageUpdated {
+            get {
+                return ((string)(this["MessageUpdated"]));
+            }
+            set {
+                this["MessageUpdated"] = value;
             }
         }
     }

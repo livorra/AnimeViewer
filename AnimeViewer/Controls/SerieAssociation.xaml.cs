@@ -57,18 +57,15 @@ namespace AnimeViewer.Controls
             temp.Clear();
             PBprogress.Maximum = series.Count;
             PBprogress.Value = 0;
+            TBMessage.Text = Properties.Settings.Default.MessageScanningSeries;
 
             new Thread(new ThreadStart(() =>
                 {
                     Thread[] threads = new Thread[5];
 
-                    int max = 0;
                     int currThread = 0;
                     foreach (Serie serie in series)
                     {
-                        max++;
-                        if (max > 5)
-                            break;
                         while(true)
                         {
                             if (threads[currThread] == null || !threads[currThread].IsAlive)
@@ -109,6 +106,12 @@ namespace AnimeViewer.Controls
             Pwait.Visibility = System.Windows.Visibility.Hidden;
             PScaned.Visibility = System.Windows.Visibility.Visible;
         }
+        private void hideResults()
+        {
+            Bscan.IsEnabled = true;
+            Pwait.Visibility = System.Windows.Visibility.Visible;
+            PScaned.Visibility = System.Windows.Visibility.Hidden;
+        }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Pwait.Visibility = System.Windows.Visibility.Visible;
@@ -118,22 +121,49 @@ namespace AnimeViewer.Controls
         }
         private void Bsave_Click(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < DGassociation.Items.Count; i++)
-            { 
-                if (!(DGassociation.Items[i] is SerieAssociationEntity))
-                    continue;
-                SerieAssociationEntity currentElement = DGassociation.Items[i] as SerieAssociationEntity;
-                if (currentElement == null || currentElement.SelectedOfferId == null)
-                    continue;
-                int selectedId = currentElement.SelectedOfferId.id;
+            hideResults();
+            PBprogress.Maximum = DGassociation.Items.Count;
+            PBprogress.Value = 0;
+            TBMessage.Text = Properties.Settings.Default.MessageUpdating;
 
-                Serie serie = repository.Series.FirstOrDefault(o => o.Name == currentElement.Serie.Name);
-                if(selectedId == -1)
-                    serie.Info = null;
-                else
-                    serie.Info = Animenewsnetwork.getInformation(selectedId);
-                
-            }
+            new Thread(new ThreadStart(() =>
+                {
+                    for (int i = 0; i < DGassociation.Items.Count; i++)
+                    {
+                        SerieAssociationEntity currentElement = DGassociation.Items[i] as SerieAssociationEntity;
+                        if (currentElement != null && currentElement.SelectedOfferId != null)
+                        {
+                            int selectedId = currentElement.SelectedOfferId.id;
+                            AnimeInfo newInfo;
+                            if (selectedId == -1)
+                                newInfo = null;
+                            else
+                                newInfo = Animenewsnetwork.getInformation(selectedId);
+
+                            this.Dispatcher.Invoke(new dvoid(() =>
+                                {
+                                    Serie serie = repository.Series.FirstOrDefault(o => o.Name == currentElement.Serie.Name);
+                                    serie.Info = newInfo;
+                                    PBprogress.Value =i+1;
+                                    Lprogress.Text = "Updated " + serie.Name + " [" + i+1 + " of " + PBprogress.Maximum + "]";
+                                }));
+
+                        }
+                        else 
+                        {
+                            this.Dispatcher.Invoke(new dvoid(() =>
+                               {
+                                   PBprogress.Value = i + 1;
+                               }));
+                        }
+
+                    }
+                })).Start();
+            this.Dispatcher.Invoke(new dvoid(() =>
+            {
+                TBMessage.Text = Properties.Settings.Default.MessageUpdated;
+            }));
+            
         }
         #region listview presentation helper
         private void DGassociation_SizeChanged(object sender, SizeChangedEventArgs e)
