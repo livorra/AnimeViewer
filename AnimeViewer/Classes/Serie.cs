@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 using AnimeViewer.Support;
+using System.ComponentModel;
 
 namespace AnimeViewer.Classes
 {
-    public class Serie
+    public class Serie : INotifyPropertyChanged 
     {
         string name;
         public string Name
@@ -33,12 +34,14 @@ namespace AnimeViewer.Classes
             }
             set
             {
+
                 if(value != null)
                     Files.WriteFile(System.IO.Path.Combine(path,Properties.Settings.Default.SerieInfoFile),JsonConvert.SerializeObject(value));
                 else
                 {
                     File.Delete(System.IO.Path.Combine(path,Properties.Settings.Default.SerieInfoFile));
                 }
+                OnPropertyChanged("Info");
             }
         }
 
@@ -49,5 +52,12 @@ namespace AnimeViewer.Classes
             this.name = System.IO.Path.GetFileName(path);
             this.chapters = Directory.GetFiles(path).Select(s => new Chapter(s)).ToList();
         }
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            if (propertyName != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }
