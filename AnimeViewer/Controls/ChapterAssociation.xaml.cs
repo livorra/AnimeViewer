@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -22,6 +23,7 @@ namespace AnimeViewer.Controls
     /// </summary>
     public partial class ChapterAssociation : UserControl
     {
+        Regex regex;
         public Serie Serie
         {
             get { return (Serie)GetValue(repositoryProperty); }
@@ -53,20 +55,36 @@ namespace AnimeViewer.Controls
         {
             List<ChapterAssociationEntity> chapterAssociations = new List<ChapterAssociationEntity>();
             string mask = GetIntegerMask(Serie.Info.OfficialEpisodes.Keys.Count);
+            List<int> addedKeys = new List<int>();
             Dictionary<int, List<Chapter>> localChapters = Parser.GetEpisodeName(chapters);
 
             foreach(int key in Serie.Info.OfficialEpisodes.Keys)
             {
+                addedKeys.Add(key);
                 ChapterAssociationEntity newChapter = new ChapterAssociationEntity();
-                newChapter.OfficialChapter = key.ToString(mask) + " - " + Serie.Info.OfficialEpisodes[key];
+                newChapter.OfficialChapter = newChapter.NewChapterName = key.ToString(mask) + " - " + Serie.Info.OfficialEpisodes[key];
                 if (localChapters.ContainsKey(key))
                     newChapter.Chapters = localChapters[key];
                 else
                     newChapter.Chapters = new List<Chapter>();
                 chapterAssociations.Add(newChapter);
             }
+            List<Chapter> unversioned = new List<Chapter>();
+            foreach(int key in localChapters.Keys)
+            {
+                if (!addedKeys.Contains(key))
+                    unversioned.AddRange(localChapters[key]);
+            }
+            if(unversioned.Count > 0)
+            {
+                ChapterAssociationEntity newChapter = new ChapterAssociationEntity();
+                newChapter.Chapters = unversioned;
+                newChapter.OfficialChapter = "Unrecognised files";
+                chapterAssociations.Add(newChapter);
+            }
             return chapterAssociations;
         }
+
         public string GetIntegerMask(int max)
         {
             string mask = "00";
@@ -81,7 +99,7 @@ namespace AnimeViewer.Controls
         }
         private void UpdateColumnsWidth(ListView listView)
         {
-            int autoFillColumnIndex = 1;
+            int autoFillColumnIndex = 2;
             if (listView.ActualWidth == Double.NaN)
                 listView.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
             if (Double.IsNaN( (listView.View as GridView).Columns[autoFillColumnIndex].Width))
@@ -90,9 +108,93 @@ namespace AnimeViewer.Controls
             for (int i = 0; i < (listView.View as GridView).Columns.Count; i++)
                 if (i != autoFillColumnIndex)
                     remainingSpace -= (listView.View as GridView).Columns[i].ActualWidth;
-            (listView.View as GridView).Columns[autoFillColumnIndex].Width = remainingSpace >= 0 ? remainingSpace : 0;
+            (listView.View as GridView).Columns[autoFillColumnIndex].Width = remainingSpace >= 0 ? remainingSpace-5 : 0;
         }
         #endregion
 
+        #region hightlight search
+        private void CBcontext_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                regex = new Regex("(" + TBSearch.Text + ")", RegexOptions.IgnoreCase);
+                FindListViewItem(LVchaptersSync);
+            }
+            catch
+            {
+
+            }
+        }
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                regex = new Regex("(" + TBSearch.Text + ")", RegexOptions.IgnoreCase);
+                FindListViewItem(LVchaptersSync);
+            }
+            catch
+            {
+
+            }
+            
+        }
+        public void FindListViewItem(DependencyObject obj)
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+            {
+                ListViewItem lv = obj as ListViewItem;
+                if (lv != null)
+                {
+                    HighlightText(lv);
+                }
+                FindListViewItem(VisualTreeHelper.GetChild(obj as DependencyObject, i));
+            }
+        }
+        private void HighlightText(Object itx)
+        {
+
+            if (itx != null)
+            {
+                if (itx is TextBlock)
+                {
+                    regex = new Regex("(" + TBSearch.Text + ")", RegexOptions.IgnoreCase);
+                    TextBlock tb = itx as TextBlock;
+
+                    if (TBSearch.Text.Length == 0)
+                    {
+                        string str = tb.Text;
+                        tb.Inlines.Clear();
+                        tb.Inlines.Add(str);
+                        return;
+                    }
+                    string[] substrings = regex.Split(tb.Text);
+                    tb.Inlines.Clear();
+                    foreach (var item in substrings)
+                    {
+                        if (tb.Name == ((ListBoxItem)CBcontext.SelectedItem).Tag.ToString() && regex.Match(item).Success)
+                        {
+                            Run runx = new Run(item);
+                            runx.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#3399FF")); ;
+                            tb.Inlines.Add(runx);
+                        }
+                        else
+                        {
+                            tb.Inlines.Add(item);
+                        }
+                    }
+                    return;
+                }
+                else
+                {
+                    for (int i = 0; i < VisualTreeHelper.GetChildrenCount(itx as DependencyObject); i++)
+                    {
+                        HighlightText(VisualTreeHelper.GetChild(itx as DependencyObject, i));
+                    }
+                }
+            }
+        }
+        #endregion
+
+        
     }
 }
