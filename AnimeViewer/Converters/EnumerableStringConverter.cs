@@ -58,4 +58,30 @@ namespace AnimeViewer.Converters
             throw new NotImplementedException();
         }
     }
+    public class Not1BoolConverter : IValueConverter
+    {
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+
+            if (value != null)
+            {
+
+                int condition = (int)value;
+                return condition != 1;
+            }
+            else
+                return value;
+
+        }
+
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+
+            throw new NotImplementedException();
+
+        }
+
+    }
 }

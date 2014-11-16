@@ -3,11 +3,25 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Converters ="clr-namespace:AnimeViewer.Converters"
              x:Name="chapterAssociation"
              mc:Ignorable="d" Height="606" Width="815">
+    <UserControl.Resources>
+        <Converters:Not1BoolConverter x:Key="Not1BoolConverter"/>
+    </UserControl.Resources>
     <Grid>
         <TextBlock HorizontalAlignment="Center" Margin="0,23,0,0" TextWrapping="Wrap" Text="{Binding ElementName=chapterAssociation,Path=Serie.Name}" VerticalAlignment="Top" Height="55" Foreground="{DynamicResource LabelForegroundDecription}" FontSize="36"/>
         <ListView Margin="10,83,10,122" SizeChanged="DGassociation_SizeChanged" ItemsSource="{Binding ElementName=chapterAssociation,Path=ChapterAssociationEntities}">
+            <ListView.Resources>
+                <Style TargetType="ListViewItem">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Chapters.Count,Converter={StaticResource Not1BoolConverter}}" Value="true">
+                            <Setter Property="Background" Value="#FFEC9C9C" />
+                        </DataTrigger>
+                    </Style.Triggers>
+
+                </Style>
+            </ListView.Resources>
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Official name" Width="300">
