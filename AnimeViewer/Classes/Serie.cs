@@ -59,6 +59,10 @@ namespace AnimeViewer.Classes
             if (propertyName != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
+        public override string ToString()
+        {
+            return Name;
+        }
         public event PropertyChangedEventHandler PropertyChanged;
     }
 }

@@ -10,18 +10,30 @@
         <ListView Margin="10,83,10,122" SizeChanged="DGassociation_SizeChanged" ItemsSource="{Binding ElementName=chapterAssociation,Path=ChapterAssociationEntities}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Official name" Width="500">
+                    <GridViewColumn Header="Official name" Width="300">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding OfficialChapter}" x:Name="BchangeName"/>
+                                <TextBlock Text="{Binding OfficialChapter}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="File name" Width="auto" />
+                    <GridViewColumn Header="All Chapters" Width="250" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox  SelectedIndex="0" ItemsSource="{Binding Chapters}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Total chapters" Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Chapters.Count}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="32,43,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
 
     </Grid>
 </UserControl>

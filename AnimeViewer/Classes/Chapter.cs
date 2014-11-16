@@ -23,5 +23,9 @@ namespace AnimeViewer.Classes
             this.path = path;
             this.name = System.IO.Path.GetFileName(path);
         }
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

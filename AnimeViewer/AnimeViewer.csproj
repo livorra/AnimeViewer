@@ -85,6 +85,7 @@
     <Compile Include="SupportClasses\SerieAssociationEntity.cs" />
     <Compile Include="Support\Connections.cs" />
     <Compile Include="Support\Files.cs" />
+    <Compile Include="Support\Parser.cs" />
     <Page Include="Controls\ChapterAssociation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
