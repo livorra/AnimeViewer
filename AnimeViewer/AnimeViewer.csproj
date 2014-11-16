@@ -76,6 +76,7 @@
       <DependentUpon>SerieInfoControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\EnumerableStringConverter.cs" />
+    <Compile Include="ExtendedControls\ExtendedTextBox.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>

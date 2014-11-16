@@ -84,7 +84,6 @@ namespace AnimeViewer.Controls
             }
             return chapterAssociations;
         }
-
         public string GetIntegerMask(int max)
         {
             string mask = "00";
@@ -92,6 +91,7 @@ namespace AnimeViewer.Controls
                 mask = "000";
             return mask;
         }
+
         #region listview behavior
         private void DGassociation_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -117,7 +117,7 @@ namespace AnimeViewer.Controls
         {
             try
             {
-                regex = new Regex("(" + TBSearch.Text + ")", RegexOptions.IgnoreCase);
+                regex = new Regex("(" + TBSearch.Utf8Text + ")", RegexOptions.IgnoreCase);
                 FindListViewItem(LVchaptersSync);
             }
             catch
@@ -129,7 +129,7 @@ namespace AnimeViewer.Controls
         {
             try
             {
-                regex = new Regex("(" + TBSearch.Text + ")", RegexOptions.IgnoreCase);
+                regex = new Regex("(" + TBSearch.Utf8Text + ")", RegexOptions.IgnoreCase);
                 FindListViewItem(LVchaptersSync);
             }
             catch
@@ -157,7 +157,8 @@ namespace AnimeViewer.Controls
             {
                 if (itx is TextBlock)
                 {
-                    regex = new Regex("(" + TBSearch.Text + ")", RegexOptions.IgnoreCase);
+
+                    regex = new Regex("(" + TBSearch.Utf8Text + ")", RegexOptions.IgnoreCase);
                     TextBlock tb = itx as TextBlock;
 
                     if (TBSearch.Text.Length == 0)
@@ -194,6 +195,24 @@ namespace AnimeViewer.Controls
             }
         }
         #endregion
+
+        private void Breplace_Click(object sender, RoutedEventArgs e)
+        {
+            switch(CBcontext.SelectedIndex)
+            {
+                case 0:
+                    updateNewFilenames(TBSearch.Utf8Text, TBreplace.Text);
+                    break;
+            }
+        }
+        void updateNewFilenames(string search,string replace)
+        {
+            foreach(ChapterAssociationEntity chapter in ChapterAssociationEntities )
+            {
+                Regex regex = new Regex(search);
+                chapter.NewChapterName = regex.Replace(chapter.NewChapterName, replace);
+            }
+        }
 
         
     }

@@ -36,7 +36,11 @@ namespace AnimeViewer.SupportClasses
         public string NewChapterName
         {
             get { return newChapterName; }
-            set { newChapterName = value; }
+            set 
+            { 
+                newChapterName = value; 
+                OnPropertyChanged("NewChapterName"); 
+            }
         }
         protected void OnPropertyChanged(string propertyName)
         {

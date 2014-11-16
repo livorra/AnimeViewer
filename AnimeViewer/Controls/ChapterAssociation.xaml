@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:Converters ="clr-namespace:AnimeViewer.Converters"
-             xmlns:local="clr-namespace:AnimeViewer.Controls" x:Class="AnimeViewer.Controls.ChapterAssociation"
+             xmlns:local="clr-namespace:AnimeViewer.Controls" xmlns:ExtendedControls="clr-namespace:AnimeViewer.ExtendedControls" x:Class="AnimeViewer.Controls.ChapterAssociation"
              x:Name="chapterAssociation"
              mc:Ignorable="d" Height="606" Width="815">
     <UserControl.Resources>
@@ -35,11 +35,11 @@
                     <GridViewColumn Header="Result name" Width="250" >
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Background="Transparent" IsReadOnly="True" BorderThickness="0,0,0,0" x:Name="TBnewChapterName"  Text="{Binding NewChapterName}"/>
+                                <TextBlock Background="Transparent" x:Name="TBnewChapterName"  Text="{Binding NewChapterName}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="All Chapters" Width="250" >
+                    <GridViewColumn Header="All Chapters" Width="300" >
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <ComboBox SelectedIndex="0" ItemsSource="{Binding Chapters}"/>
@@ -56,15 +56,16 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <TextBox x:Name="TBSearch" HorizontalAlignment="Left" Height="23" Margin="98,0,0,62" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom" Width="345" TextChanged="TextBox_TextChanged"/>
+        <ExtendedControls:ExtendedTextBox x:Name="TBSearch" HorizontalAlignment="Left" Height="23" Margin="98,0,0,62" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom" Width="345" TextChanged="TextBox_TextChanged"/>
         <ComboBox SelectedIndex="0" x:Name="CBcontext" HorizontalAlignment="Left" Margin="98,0,0,90" VerticalAlignment="Bottom" Width="232" SelectionChanged="CBcontext_SelectionChanged">
             <ListBoxItem Content="New chapter name" Tag="TBnewChapterName"/>
             <ListBoxItem Content="Current chapter name" Tag="TBcurrentChapterName"/>
         </ComboBox>
         <Label Content="Context" HorizontalAlignment="Left" Margin="10,0,0,90" VerticalAlignment="Bottom" Foreground="{DynamicResource LabelForegroundDecription}"/>
         <Label Content="Search" HorizontalAlignment="Left" Margin="10,0,0,62" VerticalAlignment="Bottom" Foreground="{DynamicResource LabelForegroundDecription}" RenderTransformOrigin="1.067,2.5"/>
-        <TextBox x:Name="TBSearch_Copy" HorizontalAlignment="Left" Height="23" Margin="98,0,0,33" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom" Width="345" TextChanged="TextBox_TextChanged"/>
+        <TextBox x:Name="TBreplace" HorizontalAlignment="Left" Height="23" Margin="98,0,0,33" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom" Width="345" TextChanged="TextBox_TextChanged"/>
         <Label Content="Replace" HorizontalAlignment="Left" Margin="10,0,0,33" VerticalAlignment="Bottom" Foreground="{DynamicResource LabelForegroundDecription}"/>
+        <Button Content="Replace" x:Name="Breplace" HorizontalAlignment="Left" Margin="448,0,0,33" VerticalAlignment="Bottom" Width="75" Click="Breplace_Click"/>
 
     </Grid>
 </UserControl>
