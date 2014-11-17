@@ -23,6 +23,7 @@ namespace AnimeViewer.Controls
     /// </summary>
     public partial class ChapterAssociation : UserControl
     {
+        Dictionary<string, string> InitialBindings = new Dictionary<string, string>() { { "TBcurrentChapterName", "Chapters" }, { "TBnewChapterName", "NewChapterName" } };
         Regex regex;
         public Serie Serie
         {
@@ -53,12 +54,17 @@ namespace AnimeViewer.Controls
         }
         public List<ChapterAssociationEntity> fillChapterAssociationEntity(List<Chapter> chapters)
         {
+            Dictionary<int, List<Chapter>> localChapters = Parser.GetEpisodeName(chapters);
+            return associate(localChapters);
+        }
+        public List<ChapterAssociationEntity> associate(Dictionary<int, List<Chapter>> localChapters)
+        {
             List<ChapterAssociationEntity> chapterAssociations = new List<ChapterAssociationEntity>();
             string mask = GetIntegerMask(Serie.Info.OfficialEpisodes.Keys.Count);
             List<int> addedKeys = new List<int>();
-            Dictionary<int, List<Chapter>> localChapters = Parser.GetEpisodeName(chapters);
 
-            foreach(int key in Serie.Info.OfficialEpisodes.Keys)
+
+            foreach (int key in Serie.Info.OfficialEpisodes.Keys)
             {
                 addedKeys.Add(key);
                 ChapterAssociationEntity newChapter = new ChapterAssociationEntity();
@@ -70,12 +76,12 @@ namespace AnimeViewer.Controls
                 chapterAssociations.Add(newChapter);
             }
             List<Chapter> unversioned = new List<Chapter>();
-            foreach(int key in localChapters.Keys)
+            foreach (int key in localChapters.Keys)
             {
                 if (!addedKeys.Contains(key))
                     unversioned.AddRange(localChapters[key]);
             }
-            if(unversioned.Count > 0)
+            if (unversioned.Count > 0)
             {
                 ChapterAssociationEntity newChapter = new ChapterAssociationEntity();
                 newChapter.Chapters = unversioned;
@@ -108,49 +114,49 @@ namespace AnimeViewer.Controls
             for (int i = 0; i < (listView.View as GridView).Columns.Count; i++)
                 if (i != autoFillColumnIndex)
                     remainingSpace -= (listView.View as GridView).Columns[i].ActualWidth;
-            (listView.View as GridView).Columns[autoFillColumnIndex].Width = remainingSpace >= 0 ? remainingSpace-5 : 0;
+            if (remainingSpace > 5)
+                (listView.View as GridView).Columns[autoFillColumnIndex].Width = remainingSpace >= 0 ? remainingSpace - 5 : 0;
+            else
+                (listView.View as GridView).Columns[autoFillColumnIndex].Width = remainingSpace >= 0 ? remainingSpace : 0;
         }
         #endregion
 
         #region hightlight search
         private void CBcontext_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            try
-            {
-                regex = new Regex("(" + TBSearch.Utf8Text + ")", RegexOptions.IgnoreCase);
-                FindListViewItem(LVchaptersSync);
-            }
-            catch
-            {
-
-            }
+            hightlightTextUpdate(TBSearch.Utf8Text);
         }
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            hightlightTextUpdate(TBSearch.Utf8Text);
+        }
+        private void hightlightTextUpdate(string pattern)
         {
             try
             {
                 regex = new Regex("(" + TBSearch.Utf8Text + ")", RegexOptions.IgnoreCase);
-                FindListViewItem(LVchaptersSync);
+                ListBoxItem selectedItem = ((ListBoxItem)CBcontext.SelectedItem);
+                string tbname = selectedItem.Tag.ToString();
+                FindListViewItem(LVchaptersSync, pattern, tbname, InitialBindings[tbname]);
             }
             catch
             {
 
             }
-            
         }
-        public void FindListViewItem(DependencyObject obj)
+        public void FindListViewItem(DependencyObject obj, string pattern,string tbname, string bindingPropery)
         {
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
             {
                 ListViewItem lv = obj as ListViewItem;
                 if (lv != null)
                 {
-                    HighlightText(lv);
+                    HighlightText(lv, pattern,tbname, bindingPropery);
                 }
-                FindListViewItem(VisualTreeHelper.GetChild(obj as DependencyObject, i));
+                FindListViewItem(VisualTreeHelper.GetChild(obj as DependencyObject, i), pattern,tbname, bindingPropery);
             }
         }
-        private void HighlightText(Object itx)
+        private void HighlightText(Object itx,string pattern,string tbname,string bindingPropery)
         {
 
             if (itx != null)
@@ -158,21 +164,20 @@ namespace AnimeViewer.Controls
                 if (itx is TextBlock)
                 {
 
-                    regex = new Regex("(" + TBSearch.Utf8Text + ")", RegexOptions.IgnoreCase);
+                    regex = new Regex("(" + pattern + ")", RegexOptions.IgnoreCase);
                     TextBlock tb = itx as TextBlock;
 
-                    if (TBSearch.Text.Length == 0)
+                    if (pattern.Length == 0 && tb.Name == tbname)
                     {
-                        string str = tb.Text;
-                        tb.Inlines.Clear();
-                        tb.Inlines.Add(str);
+                        Binding bind = new Binding(bindingPropery);
+                        tb.SetBinding(TextBlock.TextProperty, bind);
                         return;
                     }
                     string[] substrings = regex.Split(tb.Text);
                     tb.Inlines.Clear();
                     foreach (var item in substrings)
                     {
-                        if (tb.Name == ((ListBoxItem)CBcontext.SelectedItem).Tag.ToString() && regex.Match(item).Success)
+                        if (tb.Name == tbname && regex.Match(item).Success)
                         {
                             Run runx = new Run(item);
                             runx.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#3399FF")); ;
@@ -189,7 +194,7 @@ namespace AnimeViewer.Controls
                 {
                     for (int i = 0; i < VisualTreeHelper.GetChildrenCount(itx as DependencyObject); i++)
                     {
-                        HighlightText(VisualTreeHelper.GetChild(itx as DependencyObject, i));
+                        HighlightText(VisualTreeHelper.GetChild(itx as DependencyObject, i), pattern,tbname, bindingPropery);
                     }
                 }
             }
@@ -198,20 +203,46 @@ namespace AnimeViewer.Controls
 
         private void Breplace_Click(object sender, RoutedEventArgs e)
         {
-            switch(CBcontext.SelectedIndex)
+            switch (CBcontext.SelectedIndex)
             {
                 case 0:
                     updateNewFilenames(TBSearch.Utf8Text, TBreplace.Text);
+                    break;
+                case 1:
+                    updateCurrentFilenames(TBSearch.Utf8Text, TBreplace.Text);
                     break;
             }
         }
         void updateNewFilenames(string search,string replace)
         {
-            foreach(ChapterAssociationEntity chapter in ChapterAssociationEntities )
+            try
             {
-                Regex regex = new Regex(search);
-                chapter.NewChapterName = regex.Replace(chapter.NewChapterName, replace);
+                
+                hightlightTextUpdate("");
+                regex = new Regex("(" + search + ")");
+                foreach (ChapterAssociationEntity chapter in ChapterAssociationEntities)
+                { 
+                    chapter.NewChapterName = regex.Replace(chapter.NewChapterName, replace);
+                }
             }
+            catch
+            {
+
+            }
+        }
+        void updateCurrentFilenames(string search, string replace)
+        {
+            try
+            {
+                regex = regex = new Regex("(" + search + ")");
+                List<Chapter> modified = Serie.Chapters.ConvertAll(chapter => new Chapter(chapter.Path) { Name = regex.Replace(chapter.Name, replace) });
+                ChapterAssociationEntities = fillChapterAssociationEntity(modified);
+            }
+            catch
+            {
+
+            }
+            
         }
 
         

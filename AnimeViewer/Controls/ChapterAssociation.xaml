@@ -12,7 +12,7 @@
     </UserControl.Resources>
     <Grid>
         <TextBlock HorizontalAlignment="Center" Margin="0,23,0,0" TextWrapping="Wrap" Text="{Binding Serie.Name, ElementName=chapterAssociation}" VerticalAlignment="Top" Height="55" Foreground="{DynamicResource LabelForegroundDecription}" FontSize="36"/>
-        <ListView x:Name="LVchaptersSync" Margin="10,83,10,145" SizeChanged="DGassociation_SizeChanged" ItemsSource="{Binding ChapterAssociationEntities, ElementName=chapterAssociation}">
+        <ListView x:Name="LVchaptersSync" Margin="10,171,10,61" SizeChanged="DGassociation_SizeChanged" ItemsSource="{Binding ChapterAssociationEntities, ElementName=chapterAssociation}">
             <ListView.Resources>
                 <Style TargetType="{x:Type ListViewItem}">
                     <Style.Triggers>
@@ -56,16 +56,20 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <ExtendedControls:ExtendedTextBox x:Name="TBSearch" HorizontalAlignment="Left" Height="23" Margin="98,0,0,62" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom" Width="345" TextChanged="TextBox_TextChanged"/>
-        <ComboBox SelectedIndex="0" x:Name="CBcontext" HorizontalAlignment="Left" Margin="98,0,0,90" VerticalAlignment="Bottom" Width="232" SelectionChanged="CBcontext_SelectionChanged">
-            <ListBoxItem Content="New chapter name" Tag="TBnewChapterName"/>
-            <ListBoxItem Content="Current chapter name" Tag="TBcurrentChapterName"/>
-        </ComboBox>
-        <Label Content="Context" HorizontalAlignment="Left" Margin="10,0,0,90" VerticalAlignment="Bottom" Foreground="{DynamicResource LabelForegroundDecription}"/>
-        <Label Content="Search" HorizontalAlignment="Left" Margin="10,0,0,62" VerticalAlignment="Bottom" Foreground="{DynamicResource LabelForegroundDecription}" RenderTransformOrigin="1.067,2.5"/>
-        <TextBox x:Name="TBreplace" HorizontalAlignment="Left" Height="23" Margin="98,0,0,33" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom" Width="345" TextChanged="TextBox_TextChanged"/>
-        <Label Content="Replace" HorizontalAlignment="Left" Margin="10,0,0,33" VerticalAlignment="Bottom" Foreground="{DynamicResource LabelForegroundDecription}"/>
-        <Button Content="Replace" x:Name="Breplace" HorizontalAlignment="Left" Margin="448,0,0,33" VerticalAlignment="Bottom" Width="75" Click="Breplace_Click"/>
+        <Grid Margin="10,83,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <ExtendedControls:ExtendedTextBox x:Name="TBSearch" HorizontalAlignment="Left" Height="23" Margin="88,0,0,29" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom" Width="345" TextChanged="TextBox_TextChanged"/>
+            <ComboBox SelectedIndex="0" x:Name="CBcontext" HorizontalAlignment="Left" Margin="88,0,0,57" VerticalAlignment="Bottom" Width="232" SelectionChanged="CBcontext_SelectionChanged">
+                <ListBoxItem Content="New chapter name" Tag="TBnewChapterName"  />
+                <ListBoxItem Content="Current chapter name" Tag="TBcurrentChapterName"/>
+            </ComboBox>
+            <Label Content="Context" HorizontalAlignment="Left" Margin="0,0,0,57" VerticalAlignment="Bottom" Foreground="{DynamicResource LabelForegroundDecription}"/>
+            <Label Content="Search" HorizontalAlignment="Left" Margin="0,0,0,29" VerticalAlignment="Bottom" Foreground="{DynamicResource LabelForegroundDecription}" RenderTransformOrigin="1.067,2.5"/>
+            <TextBox x:Name="TBreplace" HorizontalAlignment="Left" Height="23" Margin="88,0,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom" Width="345" TextChanged="TextBox_TextChanged"/>
+            <Label Content="Replace" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="{DynamicResource LabelForegroundDecription}"/>
+            <Button Content="Replace" x:Name="Breplace" HorizontalAlignment="Left" Margin="438,0,0,0" VerticalAlignment="Bottom" Width="75" Click="Breplace_Click"/>
+
+        </Grid>
+        <CheckBox x:Name="CBregex" Content="RegEx" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="455,120,0,0" Foreground="{DynamicResource LabelForegroundDecription}"/>
 
     </Grid>
 </UserControl>

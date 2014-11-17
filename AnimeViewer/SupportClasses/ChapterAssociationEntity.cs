@@ -42,6 +42,10 @@ namespace AnimeViewer.SupportClasses
                 OnPropertyChanged("NewChapterName"); 
             }
         }
+        public void RefreshChapters()
+        {
+            OnPropertyChanged("Chapters"); 
+        }
         protected void OnPropertyChanged(string propertyName)
         {
             if (propertyName != null && PropertyChanged != null)
